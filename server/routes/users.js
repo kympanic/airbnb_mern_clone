@@ -40,7 +40,7 @@ router.route("/login").post(async (req, res) => {
 				{}, //options is empty
 				(err, token) => {
 					if (err) throw err;
-					res.cookie("token", token).json("pass ok");
+					res.cookie("token", token).json(userDoc);
 				}
 			);
 		} else {
@@ -48,6 +48,18 @@ router.route("/login").post(async (req, res) => {
 		}
 	} else {
 		res.json("notfound");
+	}
+});
+router.route("/profile").get(async (req, res) => {
+	const { token } = req.cookies;
+	if (token) {
+		jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+			if (err) throw err;
+			const { name, email, _id } = await UserModel.findById(userData.id);
+			res.json({ name, email, _id });
+		});
+	} else {
+		res.json(null);
 	}
 });
 

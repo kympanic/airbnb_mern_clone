@@ -1,6 +1,7 @@
 import express from "express";
 import * as dotenv from "dotenv";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import userRoutes from "./routes/users.js";
 import connectDB from "./mongodb/connect.js";
 
@@ -8,6 +9,7 @@ dotenv.config();
 const app = express();
 //parse the json from request
 app.use(express.json());
+app.use(cookieParser());
 app.use(
 	cors({
 		credentials: true,
