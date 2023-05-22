@@ -47,7 +47,7 @@ router.route("/login").post(async (req, res) => {
 			res.status(422).json("pass not ok");
 		}
 	} else {
-		res.json("notfound");
+		res.status(422).json("User not found");
 	}
 });
 router.route("/profile").get(async (req, res) => {
