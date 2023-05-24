@@ -1,3 +1,5 @@
 import Header from "./header";
 import Footer from "./Footer";
-export { Header, Footer };
+import Places from "./Places";
+
+export { Header, Footer, Places };
