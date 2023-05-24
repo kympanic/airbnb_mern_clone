@@ -1,7 +1,7 @@
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { Home, Login, Register, Profile } from "./pages";
-import { Header, Footer } from "./components";
+import { Header } from "./components";
 import axios from "axios";
 import { UserContextProvider } from "./UserContext";
 
@@ -18,8 +18,11 @@ function App() {
 					<Route path="/login" element={<Login />} />
 					<Route path="/register" element={<Register />} />
 					<Route path="/profile/:subpage?" element={<Profile />} />
+					<Route
+						path="/profile/:subpage/:action"
+						element={<Profile />}
+					/>
 				</Routes>
-				<Footer />
 			</BrowserRouter>
 		</UserContextProvider>
 	);
