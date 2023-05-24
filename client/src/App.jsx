@@ -17,7 +17,7 @@ function App() {
 					<Route index element={<Home />} />
 					<Route path="/login" element={<Login />} />
 					<Route path="/register" element={<Register />} />
-					<Route path="/profile" element={<Profile />} />
+					<Route path="/profile/:subpage?" element={<Profile />} />
 				</Routes>
 				<Footer />
 			</BrowserRouter>

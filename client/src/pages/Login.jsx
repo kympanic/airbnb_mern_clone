@@ -8,6 +8,7 @@ const Login = () => {
 	const [password, setPassword] = useState("");
 	const [redirect, setRedirect] = useState(false);
 	const { setUser } = useContext(UserContext);
+
 	const handleLogin = async (e) => {
 		e.preventDefault();
 		try {
@@ -15,7 +16,6 @@ const Login = () => {
 				email,
 				password,
 			});
-
 			setUser(data);
 			alert("Login successful");
 			setRedirect(true);

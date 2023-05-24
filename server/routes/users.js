@@ -7,6 +7,7 @@ const router = express.Router();
 
 const bcryptPassword = bcrypt.genSaltSync(10);
 const jwtSecret = "jogsdgf8JF2d";
+
 router.route("/test").get((req, res) => {
 	res.status(200).json("This is a test!");
 });
@@ -61,6 +62,10 @@ router.route("/profile").get(async (req, res) => {
 	} else {
 		res.json(null);
 	}
+});
+
+router.route("/logout").post((req, res) => {
+	res.cookie("token", "").json(true);
 });
 
 export default router;
