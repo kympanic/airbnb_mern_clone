@@ -1,19 +1,37 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Perks from "./Perks";
+import axios from "axios";
 
 const Places = () => {
 	const { action } = useParams();
 	const [title, setTitle] = useState("");
 	const [address, setAddress] = useState("");
 	const [addedPhotos, setAddedPhotos] = useState([]);
-	const [photoLink, setPhotoLink] = useState("");
 	const [description, setDescription] = useState("");
 	const [perks, setPerks] = useState([]);
 	const [extraInfo, setExtraInfo] = useState("");
 	const [checkIn, setCheckIn] = useState("");
 	const [checkOut, setCheckOut] = useState("");
 	const [maxGuests, setMaxGuests] = useState(1);
+
+	const uploadPhoto = (e) => {
+		const files = e.target.files;
+		const data = new FormData();
+		for (let i = 0; i < files.length; i++) {
+			data.append("photos", files[i]);
+		}
+		axios
+			.post("http://127.0.0.1:8080/places/upload", data, {
+				headers: { "Content-type": "multipart/form-data" },
+			})
+			.then((response) => {
+				const { data: filenames } = response;
+				setAddedPhotos((prev) => {
+					return [...prev, ...filenames];
+				});
+			});
+	};
 
 	return (
 		<div>
@@ -66,7 +84,7 @@ const Places = () => {
 						<p className="text-gray-500 text-sm">
 							including more photos is always better
 						</p>
-						<div className="flex gap-2">
+						{/* <div className="flex gap-2">
 							<input
 								type="text"
 								placeholder="add using a link ....jpeg"
@@ -76,9 +94,28 @@ const Places = () => {
 							<button className="bg-gray-200 px-4 rounded-2xl">
 								Add&nbsp;Photo
 							</button>
-						</div>
+						</div> */}
 						<div className="mt-2 grid grid-cols-3 md:grid-cols-4 lg-grid-cols-6">
-							<button className="flex justify-center gap-1 border bg-transparent rounded-2xl p-8 text-2xl text-gray-600">
+							{addedPhotos.length > 0 &&
+								addedPhotos.map((link) => (
+									<div key={link} className="flex h-32">
+										<img
+											className="rounded-2xl w-full object-cover"
+											src={
+												"http://localhost:8080/uploads/" +
+												link
+											}
+											alt=""
+										/>
+									</div>
+								))}
+							<label className="flex justify-center gap-1 border bg-transparent rounded-2xl p-8 text-2xl text-gray-600 cursor-pointer">
+								<input
+									type="file"
+									multiple
+									className="hidden"
+									onChange={uploadPhoto}
+								/>
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
 									fill="none"
@@ -94,7 +131,7 @@ const Places = () => {
 									/>
 								</svg>
 								Upload
-							</button>
+							</label>
 						</div>
 						<h2 className="text-2xl mt-4">Description</h2>
 						<p className="text-gray-500 text-sm">

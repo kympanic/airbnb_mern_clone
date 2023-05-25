@@ -9,6 +9,8 @@ const Profile = () => {
 	const [redirect, setRedirect] = useState(null);
 	let { subpage } = useParams();
 
+	console.log(user, "this is the user");
+
 	//if subpage is undefined, we change type to link classes between the three tabs
 	if (subpage === undefined) {
 		subpage = "profile";
@@ -36,7 +38,7 @@ const Profile = () => {
 
 	//logout
 	const logout = async () => {
-		await axios.post("/users/logout");
+		await axios.post("http://127.0.0.1:8080/users/logout");
 		setRedirect("/");
 		setUser(null);
 	};

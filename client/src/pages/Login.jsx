@@ -12,10 +12,13 @@ const Login = () => {
 	const handleLogin = async (e) => {
 		e.preventDefault();
 		try {
-			const { data } = await axios.post("/users/login", {
-				email,
-				password,
-			});
+			const { data } = await axios.post(
+				"http://127.0.0.1:8080/users/login",
+				{
+					email,
+					password,
+				}
+			);
 			setUser(data);
 			alert("Login successful");
 			setRedirect(true);
