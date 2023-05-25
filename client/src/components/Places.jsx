@@ -38,12 +38,14 @@ const Places = () => {
 					{places.length > 0 &&
 						places.map((place) => (
 							<Link
+								key={place._id}
 								to={`/profile/places/${place._id}`}
 								className="flex gap-4 bg-gray-100 p-4 rounded-2xl cursor-pointer"
 							>
-								<div className="w-32 h-32 bg-gray-300 shrink-0">
+								<div className="flex w-32 h-32 bg-gray-300 grow-0">
 									{place.photos.length > 0 && (
 										<img
+											className="object-cover"
 											src={`http://localhost:8080/uploads/${place.photos[0]}`}
 											alt=""
 										/>

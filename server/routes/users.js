@@ -3,8 +3,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import UserModel from "../mongodb/models/User.js";
 import PlaceModel from "../mongodb/models/Place.js";
-const router = express.Router();
 
+const router = express.Router();
 const bcryptPassword = bcrypt.genSaltSync(10);
 export const jwtSecret = "jogsdgf8JF2d";
 

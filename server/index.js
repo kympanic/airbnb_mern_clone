@@ -12,7 +12,7 @@ dotenv.config();
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-console.log(__dirname + "/uploads", "<=thi sis the dirname");
+// console.log(__dirname + "/uploads", "<=thi sis the dirname");
 
 //parse the json from request
 app.use(express.json());
@@ -24,7 +24,6 @@ app.use(
 		origin: "http://127.0.0.1:5173",
 	})
 );
-
 app.use("/users", userRoutes);
 app.use("/places", placeRoutes);
 
