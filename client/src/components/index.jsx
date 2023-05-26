@@ -1,4 +1,4 @@
-import Header from "./header";
+import Header from "./Header";
 import Footer from "./Footer";
 import Places from "./Places";
 import PlacesForm from "./PlacesForm";
