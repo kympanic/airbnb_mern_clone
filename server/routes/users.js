@@ -12,6 +12,7 @@ router.route("/test").get((req, res) => {
 	res.status(200).json("This is a test!");
 });
 
+//register user
 router.route("/register").post(async (req, res) => {
 	const { name, email, password } = req.body;
 	try {
@@ -26,6 +27,7 @@ router.route("/register").post(async (req, res) => {
 	}
 });
 
+//login user
 router.route("/login").post(async (req, res) => {
 	const { email, password } = req.body;
 	const userDoc = await UserModel.findOne({ email });
@@ -52,10 +54,12 @@ router.route("/login").post(async (req, res) => {
 	}
 });
 
+//logout user
 router.route("/logout").post((req, res) => {
 	res.cookie("token", "").json(true);
 });
 
+//check loginuser and send info
 router.route("/profile").get(async (req, res) => {
 	const { token } = req.cookies;
 	if (token) {
@@ -69,6 +73,7 @@ router.route("/profile").get(async (req, res) => {
 	}
 });
 
+//return all places by owner
 router.route("/places").get((req, res) => {
 	const { token } = req.cookies;
 	jwt.verify(token, jwtSecret, {}, async (err, userData) => {
@@ -77,11 +82,18 @@ router.route("/places").get((req, res) => {
 	});
 });
 
+//return all places
+router.route("/places-all").get(async (req, res) => {
+	res.json(await PlaceModel.find());
+});
+
+//return place by placeid
 router.route("/places/:id").get(async (req, res) => {
 	const { id } = req.params;
 	res.json(await PlaceModel.findById(id));
 });
 
+//edit a place
 router.route("/edit/place").put(async (req, res) => {
 	const { token } = req.cookies;
 	const {
@@ -95,6 +107,7 @@ router.route("/edit/place").put(async (req, res) => {
 		checkIn,
 		checkOut,
 		maxGuests,
+		price,
 	} = req.body;
 	jwt.verify(token, jwtSecret, {}, async (err, userData) => {
 		if (err) throw err;
@@ -110,6 +123,7 @@ router.route("/edit/place").put(async (req, res) => {
 				checkIn,
 				checkOut,
 				maxGuests,
+				price,
 			});
 			await editedPlace.save();
 			res.json("ok");
@@ -117,6 +131,7 @@ router.route("/edit/place").put(async (req, res) => {
 	});
 });
 
+//upload a new place
 router.route("/upload/place").post(async (req, res) => {
 	const { token } = req.cookies;
 	const {
@@ -129,6 +144,7 @@ router.route("/upload/place").post(async (req, res) => {
 		checkIn,
 		checkOut,
 		maxGuests,
+		price,
 	} = req.body;
 	jwt.verify(token, jwtSecret, {}, async (err, userData) => {
 		if (err) throw err;
@@ -143,6 +159,7 @@ router.route("/upload/place").post(async (req, res) => {
 			checkIn,
 			checkOut,
 			maxGuests,
+			price,
 		});
 		res.json(newPlace);
 	});

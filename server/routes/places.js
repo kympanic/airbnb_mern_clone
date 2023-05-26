@@ -1,6 +1,7 @@
 import express from "express";
 import multer from "multer";
 import fs from "fs";
+// import PlaceModel from "../mongodb/models/Place";
 
 const router = express.Router();
 
@@ -12,6 +13,10 @@ const photosMiddleware = multer({ dest: "uploads" });
 
 router.get("/testing", (req, res) => {
 	res.json("does this work?");
+});
+
+router.get("/", async (req, res) => {
+	res.json(await PlaceModel.find());
 });
 
 router.post(
