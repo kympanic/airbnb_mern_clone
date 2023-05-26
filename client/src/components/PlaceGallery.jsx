@@ -34,7 +34,7 @@ export default function PlaceGallery({ place }) {
 					{place?.photos?.length > 0 &&
 						place.photos.map((photo) => (
 							<div key={photo}>
-								<img src={photo} alt="" />
+								<Image src={photo} alt="" />
 							</div>
 						))}
 				</div>
