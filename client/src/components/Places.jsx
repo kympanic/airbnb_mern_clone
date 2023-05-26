@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import ProfileNav from "./ProfileNav";
+
+import { ProfileNav, PlaceImg } from "../components/index";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -43,13 +44,7 @@ const Places = () => {
 								className="flex gap-4 bg-gray-100 p-4 text-center rounded-2xl cursor-pointer mt-2"
 							>
 								<div className="flex w-32 h-32 bg-gray-300 grow shrink-0">
-									{place.photos.length > 0 && (
-										<img
-											className="object-fill"
-											src={`http://localhost:8080/uploads/${place.photos[0]}`}
-											alt=""
-										/>
-									)}
+									<PlaceImg place={place} />
 								</div>
 								<div className="grow-0 shrink">
 									<h2 className="text-xl">{place.title}</h2>

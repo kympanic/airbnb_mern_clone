@@ -1,10 +1,17 @@
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import "./App.css";
-import { Home, Login, Register, Profile, PlaceInfo } from "./pages";
+import {
+	Home,
+	Login,
+	Register,
+	Profile,
+	PlaceInfo,
+	Bookings,
+	SingleBooking,
+} from "./pages";
 import { Header, Places, PlacesForm } from "./components";
 import axios from "axios";
 import { UserContextProvider } from "./UserContext";
-import Layout from "./pages/Layout";
 
 // axios.defaults.baseURL = "http://127.0.0.1:8080";
 axios.defaults.withCredentials = true;
@@ -15,7 +22,6 @@ function App() {
 			<BrowserRouter>
 				<Header />
 				<Routes>
-					{/* <Route path="/" element={<Layout />}> */}
 					<Route index element={<Home />} />
 					<Route path="/login" element={<Login />} />
 					<Route path="/register" element={<Register />} />
@@ -30,7 +36,11 @@ function App() {
 						element={<PlacesForm />}
 					/>
 					<Route path="/place/:id" element={<PlaceInfo />} />
-					{/* </Route> */}
+					<Route path="/profile/bookings" element={<Bookings />} />
+					<Route
+						path="/profile/bookings/:id"
+						element={<SingleBooking />}
+					/>
 				</Routes>
 			</BrowserRouter>
 		</UserContextProvider>
