@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import { jwtSecret } from "./users.js";
 import multer from "multer";
 import { PutObjectCommand, S3, S3Client } from "@aws-sdk/client-s3";
+import connectDB from "../mongodb/connect.js";
 
 const router = express.Router();
 const bucket = "airbnb-mern-danyoo";
@@ -33,20 +34,17 @@ const uploadToS3 = async (path, originalFilename, mimetype) => {
 };
 
 router.route("/test").get((req, res) => {
+	connectDB(process.env.MONGODB_URL);
 	res.status(200).json("This is a test!");
 });
 
 const photosMiddleware = multer({ dest: "/tmp" });
 
-router.get("/testing", (req, res) => {
-	res.json("does this work?");
-});
-
 router.post(
 	"/upload/photos",
 	photosMiddleware.array("photos", 100),
 	async (req, res) => {
-		//rename file to include ext when saved to have .webp/jpeg/png etc..
+		connectDB(process.env.MONGODB_URL);
 		const uploadedFiles = [];
 		for (let i = 0; i < req.files.length; i++) {
 			const { path, originalname, mimetype } = req.files[i];
@@ -59,6 +57,7 @@ router.post(
 
 //return all places by owner
 router.route("/").get((req, res) => {
+	connectDB(process.env.MONGODB_URL);
 	const { token } = req.cookies;
 	jwt.verify(token, jwtSecret, {}, async (err, userData) => {
 		const { id } = userData;
@@ -68,17 +67,20 @@ router.route("/").get((req, res) => {
 
 //return all places
 router.route("/all").get(async (req, res) => {
+	connectDB(process.env.MONGODB_URL);
 	res.json(await PlaceModel.find());
 });
 
 //return place by placeid
 router.route("/:id").get(async (req, res) => {
+	connectDB(process.env.MONGODB_URL);
 	const { id } = req.params;
 	res.json(await PlaceModel.findById(id));
 });
 
 //edit a place
 router.route("/edit").put(async (req, res) => {
+	connectDB(process.env.MONGODB_URL);
 	const { token } = req.cookies;
 	const {
 		id,
@@ -117,6 +119,7 @@ router.route("/edit").put(async (req, res) => {
 
 //upload a new place
 router.route("/upload").post(async (req, res) => {
+	connectDB(process.env.MONGODB_URL);
 	const { token } = req.cookies;
 	const {
 		title,

@@ -4,12 +4,14 @@ import jwt from "jsonwebtoken";
 import UserModel from "../mongodb/models/User.js";
 import PlaceModel from "../mongodb/models/Place.js";
 import BookingModel from "../mongodb/models/Booking.js";
+import connectDB from "../mongodb/connect.js";
 
 const router = express.Router();
 const bcryptPassword = bcrypt.genSaltSync(10);
 export const jwtSecret = "jogsdgf8JF2d";
 
 router.route("/test").get((req, res) => {
+	connectDB(process.env.MONGODB_URL);
 	res.status(200).json("This is a test!");
 });
 
@@ -24,6 +26,7 @@ function getUserDataFromReq(req) {
 
 //register user
 router.route("/register").post(async (req, res) => {
+	connectDB(process.env.MONGODB_URL);
 	const { name, email, password } = req.body;
 	try {
 		const newUser = await UserModel.create({
@@ -39,6 +42,7 @@ router.route("/register").post(async (req, res) => {
 
 //login user
 router.route("/login").post(async (req, res) => {
+	connectDB(process.env.MONGODB_URL);
 	const { email, password } = req.body;
 	const userDoc = await UserModel.findOne({ email });
 	if (userDoc) {
@@ -71,6 +75,7 @@ router.route("/logout").post((req, res) => {
 
 //check loginuser and send info
 router.route("/profile").get(async (req, res) => {
+	connectDB(process.env.MONGODB_URL);
 	const { token } = req.cookies;
 	if (token) {
 		jwt.verify(token, jwtSecret, {}, async (err, userData) => {
@@ -85,6 +90,7 @@ router.route("/profile").get(async (req, res) => {
 
 //booking
 router.post("/booking", async (req, res) => {
+	connectDB(process.env.MONGODB_URL);
 	const userData = await getUserDataFromReq(req);
 	const { place, checkIn, checkOut, numberOfGuests, name, phone, price } =
 		req.body;
@@ -107,6 +113,7 @@ router.post("/booking", async (req, res) => {
 });
 
 router.get("/bookings", async (req, res) => {
+	connectDB(process.env.MONGODB_URL);
 	const userData = await getUserDataFromReq(req);
 	res.json(await BookingModel.find({ user: userData.id }).populate("place"));
 });
