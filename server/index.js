@@ -21,7 +21,7 @@ app.use("/uploads", express.static(__dirname + "/uploads"));
 app.use(
 	cors({
 		credentials: true,
-		origin: "http://127.0.0.1:4173",
+		origin: "https://haneulbnb-frontend.onrender.com",
 	})
 );
 app.use("/users", userRoutes);
