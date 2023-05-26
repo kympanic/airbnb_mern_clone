@@ -22,21 +22,19 @@ const PlacesForm = () => {
 		if (!id) {
 			return;
 		}
-		axios
-			.get(`http://127.0.0.1:8080/users/places/${id}`)
-			.then((response) => {
-				const { data } = response;
-				setTitle(data.title);
-				setAddress(data.address);
-				setAddedPhotos(data.photos);
-				setDescription(data.description);
-				setPerks(data.perks);
-				setExtraInfo(data.extraInfo);
-				setCheckIn(data.checkIn);
-				setCheckOut(data.checkOut);
-				setMaxGuests(data.maxGuests);
-				setPrice(data.price);
-			});
+		axios.get(`http://127.0.0.1:8080/places/${id}`).then((response) => {
+			const { data } = response;
+			setTitle(data.title);
+			setAddress(data.address);
+			setAddedPhotos(data.photos);
+			setDescription(data.description);
+			setPerks(data.perks);
+			setExtraInfo(data.extraInfo);
+			setCheckIn(data.checkIn);
+			setCheckOut(data.checkOut);
+			setMaxGuests(data.maxGuests);
+			setPrice(data.price);
+		});
 	}, [id]);
 
 	const uploadPhoto = (e) => {
@@ -85,14 +83,14 @@ const PlacesForm = () => {
 			price,
 		};
 		if (id) {
-			await axios.put("http://127.0.0.1:8080/users/edit/place", {
+			await axios.put("http://127.0.0.1:8080/places/edit", {
 				id,
 				...currentPlace,
 			});
 			setRedirect(true);
 		} else {
 			await axios.post(
-				"http://127.0.0.1:8080/users/upload/place",
+				"http://127.0.0.1:8080/places/upload",
 				currentPlace
 			);
 			setRedirect(true);

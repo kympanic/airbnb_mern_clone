@@ -1,25 +1,21 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const Home = () => {
 	const [places, setPlaces] = useState([]);
 
 	useEffect(() => {
-		axios.get("http://127.0.0.1:8080/users/places-all").then((response) => {
-			setPlaces([
-				...response.data,
-				...response.data,
-				...response.data,
-				...response.data,
-			]);
+		axios.get("http://127.0.0.1:8080/places/all").then((response) => {
+			setPlaces([...response.data]);
 		});
 	}, []);
 
 	return (
-		<div className="mt-8 grid gap-x-6  grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-4 px-8 min-h-screen ">
+		<div className="mt-8 grid gap-x-6  grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-4 px-8  ">
 			{places.length > 0 &&
 				places.map((place) => (
-					<div>
+					<Link to={`/place/${place._id}`} key={place._id}>
 						<div className="bg-gray-500 mb-2 rounded-2xl flex">
 							{place.photos?.[0] && (
 								<img
@@ -34,10 +30,12 @@ const Home = () => {
 							{place.title}
 						</h3>
 						<div className="mt-1">
-							<span className="font-bold">${place.price} </span>
+							<span className="font-bold mb-4">
+								${place.price}{" "}
+							</span>
 							per night
 						</div>
-					</div>
+					</Link>
 				))}
 		</div>
 	);
