@@ -8,9 +8,11 @@ import { Link } from "react-router-dom";
 const Bookings = () => {
 	const [bookings, setBookings] = useState([]);
 	useEffect(() => {
-		axios.get("http://127.0.0.1:8080/users/bookings").then((response) => {
-			setBookings(response.data);
-		});
+		axios
+			.get("https://haneulbnb-backend.onrender.com/users/bookings")
+			.then((response) => {
+				setBookings(response.data);
+			});
 	}, []);
 
 	return (

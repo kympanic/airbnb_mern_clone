@@ -10,7 +10,7 @@ const SingleBooking = () => {
 	useEffect(() => {
 		if (id) {
 			axios
-				.get("http://127.0.0.1:8080/users/bookings")
+				.get("https://haneulbnb-backend.onrender.com/users/bookings")
 				.then((response) => {
 					const foundBooking = response.data.find(
 						({ _id }) => _id === id

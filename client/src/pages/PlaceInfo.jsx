@@ -11,9 +11,11 @@ const PlaceInfo = () => {
 		if (!id) {
 			return;
 		}
-		axios.get(`http://127.0.0.1:8080/places/${id}`).then((response) => {
-			setPlace(response.data);
-		});
+		axios
+			.get(`https://haneulbnb-backend.onrender.com/places/${id}`)
+			.then((response) => {
+				setPlace(response.data);
+			});
 	}, [id]);
 
 	if (!place) return "Loading..";

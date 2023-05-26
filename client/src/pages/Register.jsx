@@ -10,11 +10,14 @@ const Register = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
-			await axios.post("http://127.0.0.1:8080/users/register", {
-				name,
-				email,
-				password,
-			});
+			await axios.post(
+				"https://haneulbnb-backend.onrender.com/users/register",
+				{
+					name,
+					email,
+					password,
+				}
+			);
 			alert("Registration successfull. Now you can log in");
 			setRedirect(true);
 		} catch (error) {

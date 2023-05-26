@@ -26,7 +26,7 @@ const Profile = () => {
 
 	//logout
 	const logout = async () => {
-		await axios.post("http://127.0.0.1:8080/users/logout");
+		await axios.post("https://haneulbnb-backend.onrender.com/users/logout");
 		setRedirect("/");
 		setUser(null);
 	};

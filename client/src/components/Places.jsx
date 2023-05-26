@@ -8,9 +8,11 @@ const Places = () => {
 	const [places, setPlaces] = useState([]);
 
 	useEffect(() => {
-		axios.get("http://127.0.0.1:8080/places").then(({ data }) => {
-			setPlaces(data);
-		});
+		axios
+			.get("https://haneulbnb-backend.onrender.com/places")
+			.then(({ data }) => {
+				setPlaces(data);
+			});
 	}, []);
 
 	return (

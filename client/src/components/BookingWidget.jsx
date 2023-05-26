@@ -30,7 +30,7 @@ const BookingWidget = ({ place }) => {
 	const handleBooking = async (e) => {
 		e.preventDefault();
 		const response = await axios.post(
-			"http://127.0.0.1:8080/users/booking",
+			"https://haneulbnb-backend.onrender.com/users/booking",
 			{
 				place: place._id,
 				checkIn,

@@ -7,9 +7,11 @@ const Home = () => {
 	const [places, setPlaces] = useState([]);
 
 	useEffect(() => {
-		axios.get("http://127.0.0.1:8080/places/all").then((response) => {
-			setPlaces([...response.data]);
-		});
+		axios
+			.get("https://haneulbnb-backend.onrender.com/places/all")
+			.then((response) => {
+				setPlaces([...response.data]);
+			});
 	}, []);
 
 	return (
