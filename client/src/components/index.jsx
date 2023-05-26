@@ -8,6 +8,7 @@ import ProfileNav from "./ProfileNav";
 import PlaceGallery from "./PlaceGallery";
 import AddressLink from "./AddressLink";
 import BookingDates from "./BookingDates";
+import Image from "./Image";
 export {
 	Header,
 	Footer,
@@ -19,4 +20,5 @@ export {
 	PlaceGallery,
 	AddressLink,
 	BookingDates,
+	Image,
 };

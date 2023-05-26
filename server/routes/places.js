@@ -1,17 +1,42 @@
 import express from "express";
-import multer from "multer";
 import fs from "fs";
 import PlaceModel from "../mongodb/models/Place.js";
 import jwt from "jsonwebtoken";
 import { jwtSecret } from "./users.js";
+import multer from "multer";
+import { PutObjectCommand, S3, S3Client } from "@aws-sdk/client-s3";
 
 const router = express.Router();
+const bucket = "airbnb-mern-danyoo";
+
+const uploadToS3 = async (path, originalFilename, mimetype) => {
+	const client = new S3Client({
+		region: "us-west-2",
+		credentials: {
+			accessKeyId: process.env.S3_ACCESS_KEY,
+			secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+		},
+	});
+	const parts = originalFilename.split(".");
+	const ext = parts[parts.length - 1];
+	const newFilename = Date.now() + "." + ext;
+	await client.send(
+		new PutObjectCommand({
+			Bucket: bucket,
+			Body: fs.readFileSync(path),
+			Key: newFilename,
+			ContentType: mimetype,
+			ACL: "public-read",
+		})
+	);
+	return `https://${bucket}.s3.amazonaws.com/${newFilename}`;
+};
 
 router.route("/test").get((req, res) => {
 	res.status(200).json("This is a test!");
 });
 
-const photosMiddleware = multer({ dest: "uploads" });
+const photosMiddleware = multer({ dest: "/tmp" });
 
 router.get("/testing", (req, res) => {
 	res.json("does this work?");
@@ -20,18 +45,14 @@ router.get("/testing", (req, res) => {
 router.post(
 	"/upload/photos",
 	photosMiddleware.array("photos", 100),
-	(req, res) => {
+	async (req, res) => {
 		//rename file to include ext when saved to have .webp/jpeg/png etc..
 		const uploadedFiles = [];
 		for (let i = 0; i < req.files.length; i++) {
-			const { path, originalname } = req.files[i];
-			const parts = originalname.split(".");
-			const ext = parts[parts.length - 1];
-			const newPath = path + "." + ext;
-			fs.renameSync(path, newPath);
-			uploadedFiles.push(newPath.replace("uploads/", ""));
+			const { path, originalname, mimetype } = req.files[i];
+			const url = await uploadToS3(path, originalname, mimetype);
+			uploadedFiles.push(url);
 		}
-		console.log(uploadedFiles);
 		res.json(uploadedFiles);
 	}
 );

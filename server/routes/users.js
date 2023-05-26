@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import UserModel from "../mongodb/models/User.js";
 import PlaceModel from "../mongodb/models/Place.js";
+import BookingModel from "../mongodb/models/Booking.js";
 
 const router = express.Router();
 const bcryptPassword = bcrypt.genSaltSync(10);
@@ -11,6 +12,15 @@ export const jwtSecret = "jogsdgf8JF2d";
 router.route("/test").get((req, res) => {
 	res.status(200).json("This is a test!");
 });
+
+function getUserDataFromReq(req) {
+	return new Promise((resolve, reject) => {
+		jwt.verify(req.cookies.token, jwtSecret, {}, async (err, userData) => {
+			if (err) throw err;
+			resolve(userData);
+		});
+	});
+}
 
 //register user
 router.route("/register").post(async (req, res) => {
@@ -73,96 +83,32 @@ router.route("/profile").get(async (req, res) => {
 	}
 });
 
-//return all places by owner
-router.route("/places").get((req, res) => {
-	const { token } = req.cookies;
-	jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-		const { id } = userData;
-		res.json(await PlaceModel.find({ owner: id }));
-	});
-});
-
-//return all places
-router.route("/places-all").get(async (req, res) => {
-	res.json(await PlaceModel.find());
-});
-
-//return place by placeid
-router.route("/places/:id").get(async (req, res) => {
-	const { id } = req.params;
-	res.json(await PlaceModel.findById(id));
-});
-
-//edit a place
-router.route("/edit/place").put(async (req, res) => {
-	const { token } = req.cookies;
-	const {
-		id,
-		title,
-		address,
-		addedPhotos,
-		description,
-		perks,
-		extraInfo,
+//booking
+router.post("/booking", async (req, res) => {
+	const userData = await getUserDataFromReq(req);
+	const { place, checkIn, checkOut, numberOfGuests, name, phone, price } =
+		req.body;
+	BookingModel.create({
+		user: userData.id,
+		place,
 		checkIn,
 		checkOut,
-		maxGuests,
+		numberOfGuests,
+		name,
+		phone,
 		price,
-	} = req.body;
-	jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-		if (err) throw err;
-		const editedPlace = await PlaceModel.findById(id);
-		if (userData.id === editedPlace.owner.toString()) {
-			editedPlace.set({
-				title,
-				address,
-				photos: addedPhotos,
-				description,
-				perks,
-				extraInfo,
-				checkIn,
-				checkOut,
-				maxGuests,
-				price,
-			});
-			await editedPlace.save();
-			res.json("ok");
-		}
-	});
-});
-
-//upload a new place
-router.route("/upload/place").post(async (req, res) => {
-	const { token } = req.cookies;
-	const {
-		title,
-		address,
-		addedPhotos,
-		description,
-		perks,
-		extraInfo,
-		checkIn,
-		checkOut,
-		maxGuests,
-		price,
-	} = req.body;
-	jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-		if (err) throw err;
-		const newPlace = await PlaceModel.create({
-			owner: userData.id,
-			title,
-			address,
-			photos: addedPhotos,
-			description,
-			perks,
-			extraInfo,
-			checkIn,
-			checkOut,
-			maxGuests,
-			price,
+	})
+		.then((doc) => {
+			res.json(doc);
+		})
+		.catch((err) => {
+			throw err;
 		});
-		res.json(newPlace);
-	});
+});
+
+router.get("/bookings", async (req, res) => {
+	const userData = await getUserDataFromReq(req);
+	res.json(await BookingModel.find({ user: userData.id }).populate("place"));
 });
 
 export default router;

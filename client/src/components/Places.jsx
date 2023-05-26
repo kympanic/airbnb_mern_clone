@@ -14,7 +14,7 @@ const Places = () => {
 	}, []);
 
 	return (
-		<div className="py-4 px-8 flex flex-col mx-auto">
+		<div className="py-4 px-12 flex flex-col mx-auto">
 			<ProfileNav />
 			<div className="text-center">
 				<Link
@@ -41,9 +41,9 @@ const Places = () => {
 							<Link
 								key={place._id}
 								to={`/profile/places/${place._id}`}
-								className="flex gap-4 bg-gray-100 p-4 text-center rounded-2xl cursor-pointer mt-2"
+								className="flex justify-center gap-4 bg-gray-100 p-4 text-center rounded-2xl cursor-pointer mt-2"
 							>
-								<div className="flex w-32 h-32 bg-gray-300 grow shrink-0">
+								<div className="flex w-32 h-32 grow-0 shrink-0">
 									<PlaceImg place={place} />
 								</div>
 								<div className="grow-0 shrink">

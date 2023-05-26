@@ -3,6 +3,7 @@ import Perks from "./Perks";
 import axios from "axios";
 import ProfileNav from "./ProfileNav";
 import { Navigate, useParams } from "react-router-dom";
+import Image from "./Image";
 
 const PlacesForm = () => {
 	const { id } = useParams();
@@ -134,9 +135,9 @@ const PlacesForm = () => {
 						{addedPhotos?.length > 0 &&
 							addedPhotos.map((link) => (
 								<div key={link} className="flex h-32 relative">
-									<img
+									<Image
 										className="rounded-2xl w-full object-cover"
-										src={`http://localhost:8080/uploads/${link}`}
+										src={link}
 										alt=""
 									/>
 									<button
